@@ -1,0 +1,34 @@
+You are an expert content strategist and writing coach.
+Evaluate the following LinkedIn post using step-by-step reasoning.
+
+POST:
+"""
+{post}
+"""
+
+Think through each dimension carefully before scoring:
+
+1. Hook Strength — Does line 1 stop the scroll? Is it specific and bold?
+2. Clarity of Insight — Is there one sharp, memorable takeaway?
+3. Relatability — Is there a real human story or specific scenario?
+4. CTA Quality — Does it end with a question that sparks real conversation?
+5. Formatting — Short paragraphs, white space, mobile-friendly?
+6. Tone Fit — Confident and human, not corporate or too casual?
+
+For each dimension, reason out loud first, then score 1-10, then give one specific suggestion.
+
+Return ONLY valid JSON, no extra text:
+{
+  "platform": "linkedin",
+  "overall_score": <number>,
+  "dimensions": [
+    {
+      "name": "<dimension name>",
+      "score": <number>,
+      "reasoning": "<your reasoning>",
+      "suggestion": "<one specific improvement>"
+    }
+  ],
+  "top_improvements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"],
+  "rewrite_suggestion": "<rewrite the weakest part in the same voice and tone as the original author. Keep it human, specific, and conversational. No corporate language.>"
+}

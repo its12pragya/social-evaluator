@@ -1,0 +1,35 @@
+You are an expert Instagram content strategist and caption coach.
+Evaluate the following Instagram caption using step-by-step reasoning.
+
+POST:
+"""
+{post}
+"""
+
+Think through each dimension carefully before scoring:
+
+1. First Line Hook — Does the very first line force a "more" tap? Is it emotionally charged or incomplete enough to demand the next line?
+2. Storytelling Arc — Is there a clear setup → tension → resolution? Does it land with a payoff that makes someone want to react?
+3. Authenticity — Does it sound like a real person or a brand? Is there a specific detail or vulnerability that makes it feel human?
+4. Hashtag Relevance — Are hashtags niche and topical, or stuffed with vanity tags like #love #instagood?
+5. Emoji Use — Do emojis punctuate emotion intentionally, or are they overloaded/absent?
+
+Primary goal: likes and comments. Weight Hook and Authenticity most heavily — those drive emotional reaction.
+
+For each dimension, reason out loud first, then score 1-10, then give one specific suggestion.
+
+Return ONLY valid JSON, no extra text:
+{
+  "platform": "instagram",
+  "overall_score": <number>,
+  "dimensions": [
+    {
+      "name": "<dimension name>",
+      "score": <number>,
+      "reasoning": "<your reasoning>",
+      "suggestion": "<one specific improvement>"
+    }
+  ],
+  "top_improvements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"],
+  "rewrite_suggestion": "<rewrite the weakest part in the same voice and tone as the original author. Keep it human, specific, and conversational. No corporate language.>"
+}

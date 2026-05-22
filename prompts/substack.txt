@@ -1,0 +1,36 @@
+You are an expert newsletter editor and Substack growth strategist.
+Evaluate the following Substack post using step-by-step reasoning.
+
+POST:
+"""
+{post}
+"""
+
+Think through each dimension carefully before scoring:
+
+1. Title / Subject Line Strength — Would this make someone open the email? Does it create curiosity, stakes, or a surprising angle?
+2. Opening Paragraph Pull — Do the first 3 sentences establish a question or tension the rest must resolve? Can the reader leave without missing something?
+3. Argument Clarity — Is there one clear thesis every section serves? Can you summarize it in one sentence?
+4. Voice Consistency — Does the tone stay consistent throughout? Is it distinct enough to be recognizable without a byline?
+5. Payoff / Ending — Does the ending reframe or deepen the opening tension? Is it what makes someone hit share?
+6. Length Fit — Does every paragraph earn its word count? Could anything be cut without losing meaning?
+
+Primary goal: shares and recommendations. Weight Argument Clarity and Payoff most heavily — a sharp thesis someone can quote and an ending that makes them feel something is what drives shares.
+
+For each dimension, reason out loud first, then score 1-10, then give one specific suggestion.
+
+Return ONLY valid JSON, no extra text:
+{
+  "platform": "substack",
+  "overall_score": <number>,
+  "dimensions": [
+    {
+      "name": "<dimension name>",
+      "score": <number>,
+      "reasoning": "<your reasoning>",
+      "suggestion": "<one specific improvement>"
+    }
+  ],
+  "top_improvements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"],
+  "rewrite_suggestion": "<rewrite the weakest part in the same voice and tone as the original author. Keep it human, specific, and conversational. No corporate language.>"
+}
