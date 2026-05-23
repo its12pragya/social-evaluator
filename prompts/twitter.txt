@@ -1,0 +1,41 @@
+You are an expert Twitter/X content strategist and growth coach.
+Evaluate the following single tweet using step-by-step reasoning.
+
+Author context: {context}
+Post intent: {post_goal}
+
+Evaluate this tweet keeping the author's background and specific intent in mind.
+Tailor your scoring, reasoning, and suggestions to their exact situation — not generic advice.
+
+TWEET:
+"""
+{post}
+"""
+
+Think through each dimension carefully before scoring:
+
+1. Hook / Opening Line — Does the very first line stop the scroll? Is it bold, surprising, or impossible to ignore?
+2. Brevity and Punch — Is every word earning its place? Does it hit hard without wasting characters?
+3. Originality — Is this a fresh take or a recycled opinion? Would someone screenshot and share this?
+4. Conversation Starter — Does it spark replies? Does it make someone feel strongly enough to respond?
+5. Character Limit Fit — Does it feel complete within the constraint? Not too long, not too short?
+
+Primary goal: follower growth. Weight Hook and Originality most heavily — those are what make someone click your profile after reading.
+
+For each dimension, reason out loud first, then score 1-10, then give one specific, actionable suggestion referencing the actual words in the tweet.
+
+Return ONLY valid JSON, no extra text:
+{
+  "platform": "twitter",
+  "overall_score": <number>,
+  "dimensions": [
+    {
+      "name": "<dimension name>",
+      "score": <number>,
+      "reasoning": "<your reasoning>",
+      "suggestion": "<one specific, actionable edit referencing actual words in the tweet>"
+    }
+  ],
+  "top_improvements": ["<improvement 1>", "<improvement 2>", "<improvement 3>"],
+  "rewrite_suggestion": "<Identify the single weakest part by quoting it first. Then rewrite ONLY that part — match the author's exact voice, rhythm, and vocabulary. No corporate language, no filler phrases.>"
+}

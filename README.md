@@ -31,4 +31,8 @@ social-evaluator/
 ├── evaluate.py
 ├── requirements.txt
 └── .env (not committed)
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> c0063c0ec17f89cfd3922ac2a90fdf7761a75654

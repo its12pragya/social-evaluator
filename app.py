@@ -8,18 +8,20 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-PLATFORMS = ["linkedin", "instagram", "substack"]
+PLATFORMS = ["linkedin", "instagram", "substack", "twitter"]
 
 PLATFORM_TIPS = {
     "linkedin": "💼 Best for: Professional insights, personal stories, career lessons. Keep paragraphs short.",
     "instagram": "📸 Best for: Emotional hooks, personal vulnerability, relatable moments. First line is everything.",
-    "substack": "📩 Best for: Long-form essays, strong thesis, distinct voice. Opening paragraph must create tension."
+    "substack": "📩 Best for: Long-form essays, strong thesis, distinct voice. Opening paragraph must create tension.",
+    "twitter": "🐦 Best for: Sharp takes, punchy observations, conversation starters. Every word must earn its place."
 }
 
 CONTEXT_PLACEHOLDERS = {
     "linkedin": "e.g. Senior PM sharing lessons on product strategy, goal is to attract job opportunities",
     "instagram": "e.g. Travel blogger focused on solo female travel in Southeast Asia, goal is to grow followers",
-    "substack": "e.g. Newsletter writer covering AI and creativity for non-technical readers, goal is to grow paid subscribers"
+    "substack": "e.g. Newsletter writer covering AI and creativity for non-technical readers, goal is to grow paid subscribers",
+    "twitter": "e.g. Builder sharing lessons on indie hacking and AI tools, goal is to grow an audience of makers"
 }
 
 def load_prompt(platform: str, post: str, context: str, post_goal: str) -> str:
@@ -95,12 +97,24 @@ with col2:
 
 # --- Post input ---
 st.subheader("3. Paste your post")
-post = st.text_area(
-    label="Post content",
-    placeholder="Paste your LinkedIn post, Instagram caption, or Substack excerpt here...",
-    height=200,
-    label_visibility="collapsed"
-)
+
+if platform == "twitter":
+    post = st.text_area(
+        label="Post content",
+        placeholder="Paste your tweet here... (max 280 characters)",
+        height=100,
+        max_chars=280,
+        label_visibility="collapsed"
+    )
+    char_count = len(post)
+    st.caption(f"{char_count}/280 characters")
+else:
+    post = st.text_area(
+        label="Post content",
+        placeholder="Paste your LinkedIn post, Instagram caption, or Substack excerpt here...",
+        height=200,
+        label_visibility="collapsed"
+    )
 
 # --- Evaluate button ---
 st.subheader("4. Evaluate")
@@ -141,7 +155,7 @@ if st.button("Evaluate Post ✦", use_container_width=True, type="primary"):
                 for i, tip in enumerate(result["top_improvements"], 1):
                     st.markdown(f"**{i}.** {tip}")
 
-                # --- Rewrite suggestion + copy ---
+                # --- Rewrite suggestion ---
                 st.divider()
                 st.subheader("Rewrite Suggestion")
                 rewrite = result["rewrite_suggestion"]
