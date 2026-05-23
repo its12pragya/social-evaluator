@@ -74,7 +74,7 @@ def main():
         return
 
     print("\nEvaluating...")
-    result = evaluate_post(platform, post)
+    result = evaluate_post(platform, post, context, post_goal)
     print_results(result)
 
 if __name__ == "__main__":

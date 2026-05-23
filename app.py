@@ -16,14 +16,25 @@ PLATFORM_TIPS = {
     "substack": "📩 Best for: Long-form essays, strong thesis, distinct voice. Opening paragraph must create tension."
 }
 
-def load_prompt(platform: str, post: str) -> str:
+CONTEXT_PLACEHOLDERS = {
+    "linkedin": "e.g. Senior PM sharing lessons on product strategy, goal is to attract job opportunities",
+    "instagram": "e.g. Travel blogger focused on solo female travel in Southeast Asia, goal is to grow followers",
+    "substack": "e.g. Newsletter writer covering AI and creativity for non-technical readers, goal is to grow paid subscribers"
+}
+
+def load_prompt(platform: str, post: str, context: str, post_goal: str) -> str:
     prompt_path = f"prompts/{platform}.txt"
     with open(prompt_path, "r") as f:
         template = f.read()
-    return template.replace("{post}", post)
+    return (
+        template
+        .replace("{post}", post)
+        .replace("{context}", context)
+        .replace("{post_goal}", post_goal)
+    )
 
-def evaluate_post(platform: str, post: str) -> dict:
-    prompt = load_prompt(platform, post)
+def evaluate_post(platform: str, post: str, context: str = "", post_goal: str = "") -> dict:
+    prompt = load_prompt(platform, post, context, post_goal)
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt
@@ -45,13 +56,13 @@ def score_color(score: int) -> str:
 
 # --- Page config ---
 st.set_page_config(
-    page_title="Social Post Evaluator",
-    page_icon="✍️",
+    page_title="DraftLens",
+    page_icon="🔍",
     layout="centered"
 )
 
-st.title("✍️ Social Media Post Evaluator")
-st.caption("Paste your post, pick a platform, get a detailed critique powered by Gemini 2.5 Flash.")
+st.title("🔍 DraftLens")
+st.caption("Paste your post, add context, get a detailed critique powered by Gemini 2.5 Flash.")
 
 # --- Platform selector ---
 st.subheader("1. Choose your platform")
@@ -62,11 +73,28 @@ platform = st.radio(
     horizontal=True,
     label_visibility="collapsed"
 )
-
 st.info(PLATFORM_TIPS[platform])
 
+# --- Context inputs ---
+st.subheader("2. Add your context")
+col1, col2 = st.columns(2)
+
+with col1:
+    context = st.text_input(
+        label="Who are you?",
+        placeholder=CONTEXT_PLACEHOLDERS[platform],
+        help="Your role, niche, or professional background"
+    )
+
+with col2:
+    post_goal = st.text_input(
+        label="What is this post about?",
+        placeholder="e.g. Sharing a lesson I learned after a failed product launch",
+        help="One line about what this specific post is trying to say or achieve"
+    )
+
 # --- Post input ---
-st.subheader("2. Paste your post")
+st.subheader("3. Paste your post")
 post = st.text_area(
     label="Post content",
     placeholder="Paste your LinkedIn post, Instagram caption, or Substack excerpt here...",
@@ -75,14 +103,18 @@ post = st.text_area(
 )
 
 # --- Evaluate button ---
-st.subheader("3. Evaluate")
+st.subheader("4. Evaluate")
 if st.button("Evaluate Post ✦", use_container_width=True, type="primary"):
     if not post.strip():
         st.warning("Please paste a post before evaluating.")
+    elif not context.strip():
+        st.warning("Please add who you are before evaluating.")
+    elif not post_goal.strip():
+        st.warning("Please add what this post is about before evaluating.")
     else:
         with st.spinner("Gemini is reading your post..."):
             try:
-                result = evaluate_post(platform, post)
+                result = evaluate_post(platform, post, context, post_goal)
 
                 # --- Overall score ---
                 st.divider()
@@ -91,7 +123,9 @@ if st.button("Evaluate Post ✦", use_container_width=True, type="primary"):
                     st.metric("Overall Score", f"{result['overall_score']}/10")
                 with col2:
                     st.markdown(f"**Platform:** {result['platform'].capitalize()}")
-                    st.markdown(f"**Post length:** {len(post.split())} words")
+                    st.markdown(f"**Who:** {context}")
+                    st.markdown(f"**Post intent:** {post_goal}")
+                    st.markdown(f"**Word count:** {len(post.split())} words")
 
                 # --- Dimension scores ---
                 st.divider()
@@ -107,10 +141,11 @@ if st.button("Evaluate Post ✦", use_container_width=True, type="primary"):
                 for i, tip in enumerate(result["top_improvements"], 1):
                     st.markdown(f"**{i}.** {tip}")
 
-                # --- Rewrite suggestion ---
+                # --- Rewrite suggestion + copy ---
                 st.divider()
                 st.subheader("Rewrite Suggestion")
-                st.markdown(result["rewrite_suggestion"])
+                rewrite = result["rewrite_suggestion"]
+                st.code(rewrite, language=None)
 
             except json.JSONDecodeError:
                 st.error("Gemini returned an unexpected format. Try again.")

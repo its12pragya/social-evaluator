@@ -5,6 +5,11 @@ POST:
 """
 {post}
 """
+Author context: {context}
+Post intent: {post_goal}
+
+Evaluate this post keeping the author's background and specific post intent in mind.
+Tailor your scoring, reasoning, and suggestions to their exact situation — not generic advice.
 
 Think through each dimension carefully before scoring:
 
